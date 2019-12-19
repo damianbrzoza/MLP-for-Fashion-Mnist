@@ -1,0 +1,14 @@
+Mnist module
+========================================
+|
+
+.. automodule:: mnist
+    :members:
+    :undoc-members:
+    :private-members:
+    :show-inheritance:
+
+|
+
+:ref:`Return Home <mastertoc>`
+

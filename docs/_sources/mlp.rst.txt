@@ -1,0 +1,14 @@
+MLP Numpy Module
+========================================
+|
+
+.. automodule:: mlp
+    :members:
+    :undoc-members:
+    :private-members:
+    :show-inheritance:
+
+|
+
+:ref:`Return Home <mastertoc>`
+

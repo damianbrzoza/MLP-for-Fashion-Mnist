@@ -1,0 +1,14 @@
+TSP module
+========================================
+|
+
+.. automodule:: tsp
+    :members:
+    :undoc-members:
+    :private-members:
+    :show-inheritance:
+
+|
+
+:ref:`Return Home <mastertoc>`
+

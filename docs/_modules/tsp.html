@@ -1,0 +1,477 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>tsp &#8212; TSP-optimization  documentation</title>
+    <link rel="stylesheet" href="../_static/graphite.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="../" src="../_static/documentation_options.js"></script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <script type="text/javascript" src="../_static/language_data.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">TSP-optimization  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" accesskey="U">Module code</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <h1>Source code for tsp</h1><div class="highlight"><pre>
+<span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">math</span>
+<span class="kn">import</span> <span class="nn">random</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+
+<div class="viewcode-block" id="main"><a class="viewcode-back" href="../tsp.html#tsp.main">[docs]</a><span class="k">def</span> <span class="nf">main</span><span class="p">():</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    .. todo::</span>
+
+<span class="sd">        * TODO: Make some visualizations</span>
+<span class="sd">        * TODO: Add sum of distances comparision (instead of minimum criterium)</span>
+<span class="sd">        * TODO: Real data generator (distance between town A and B should be lower than between town A and C + C and A)</span>
+<span class="sd">        * TODO: Make report</span>
+<span class="sd">        * TODO: Develop Genetic algorithm, new crossing methods (ranking, roulette)</span>
+
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># To make every time the same result</span>
+    <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">seed</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+    <span class="n">dt</span> <span class="o">=</span> <span class="n">make_random_matrix</span><span class="p">(</span><span class="n">number_of_towns</span><span class="o">=</span><span class="mi">15</span><span class="p">)</span>
+    <span class="n">drivers</span> <span class="o">=</span> <span class="mi">2</span>
+    <span class="n">t_time</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">town</span> <span class="o">=</span> <span class="mi">1</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">random_search</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">number_of_drivers</span><span class="o">=</span><span class="n">drivers</span><span class="p">,</span> <span class="n">test_time</span><span class="o">=</span><span class="n">t_time</span><span class="p">,</span> <span class="n">start_town</span><span class="o">=</span><span class="n">town</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">simulated_annealing</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">number_of_drivers</span><span class="o">=</span><span class="n">drivers</span><span class="p">,</span> <span class="n">test_time</span><span class="o">=</span><span class="n">t_time</span><span class="p">,</span> <span class="n">start_town</span><span class="o">=</span><span class="n">town</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">simulated_annealing</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">number_of_drivers</span><span class="o">=</span><span class="n">drivers</span><span class="p">,</span> <span class="n">use_swap</span><span class="o">=</span><span class="kc">False</span><span class="p">,</span> <span class="n">test_time</span><span class="o">=</span><span class="n">t_time</span><span class="p">,</span> <span class="n">start_town</span><span class="o">=</span><span class="n">town</span><span class="p">)</span>
+    <span class="n">_</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">genetic_algorithm</span><span class="p">(</span><span class="n">dt</span><span class="p">,</span> <span class="n">number_of_drivers</span><span class="o">=</span><span class="n">drivers</span><span class="p">,</span> <span class="n">test_time</span><span class="o">=</span><span class="n">t_time</span><span class="p">,</span> <span class="n">start_town</span><span class="o">=</span><span class="n">town</span><span class="p">)</span>
+
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">legend</span><span class="p">(</span><span class="n">loc</span><span class="o">=</span><span class="s1">&#39;upper right&#39;</span><span class="p">,</span> <span class="n">ncol</span><span class="o">=</span><span class="mi">1</span><span class="p">)</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">show</span><span class="p">()</span></div>
+
+
+<span class="k">if</span> <span class="vm">__name__</span> <span class="o">==</span> <span class="s2">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="n">main</span><span class="p">()</span>
+
+
+<div class="viewcode-block" id="generate_random_route"><a class="viewcode-back" href="../tsp.html#tsp.generate_random_route">[docs]</a><span class="k">def</span> <span class="nf">generate_random_route</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">number_of_drivers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">start_town</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function which generate random route</span>
+
+<span class="sd">    :param data: distance matrix</span>
+<span class="sd">    :type data: np.array</span>
+<span class="sd">    :param number_of_drivers: number of travelers/drivers</span>
+<span class="sd">    :type number_of_drivers: int</span>
+<span class="sd">    :param start_town: index of starting town</span>
+<span class="sd">    :type start_town: int</span>
+<span class="sd">    :return: tuple of distances and routes of each travelers</span>
+<span class="sd">    :rtype: tuple</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="k">assert</span> <span class="n">start_town</span> <span class="o">&lt;</span> <span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>  <span class="c1"># Town must be at matrix!</span>
+    <span class="n">route</span> <span class="o">=</span> <span class="p">[</span><span class="n">x</span> <span class="k">for</span> <span class="n">x</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">data</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span> <span class="k">if</span> <span class="n">x</span> <span class="o">!=</span> <span class="n">start_town</span><span class="p">]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">number_of_drivers</span><span class="o">-</span><span class="mi">1</span><span class="p">):</span>
+        <span class="n">route</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">start_town</span><span class="p">)</span>
+    <span class="n">random</span><span class="o">.</span><span class="n">shuffle</span><span class="p">(</span><span class="n">route</span><span class="p">)</span>
+    <span class="n">route</span> <span class="o">=</span> <span class="p">[</span><span class="n">start_town</span><span class="p">]</span> <span class="o">+</span> <span class="n">route</span>
+    <span class="n">route</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">start_town</span><span class="p">)</span>
+    <span class="n">distances</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">number_of_drivers</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+    <span class="n">j</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">route</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span><span class="p">)):</span>
+        <span class="k">if</span> <span class="n">route</span><span class="p">[</span><span class="n">i</span><span class="p">]</span> <span class="o">==</span> <span class="n">start_town</span><span class="p">:</span>
+            <span class="n">j</span> <span class="o">=</span> <span class="n">j</span><span class="o">+</span><span class="mi">1</span>
+        <span class="n">distances</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">distances</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="n">route</span><span class="p">[</span><span class="n">i</span><span class="p">],</span> <span class="n">route</span><span class="p">[</span><span class="n">i</span><span class="o">+</span><span class="mi">1</span><span class="p">]]</span>
+    <span class="k">return</span> <span class="n">distances</span><span class="p">,</span> <span class="n">route</span></div>
+
+
+<div class="viewcode-block" id="make_random_matrix"><a class="viewcode-back" href="../tsp.html#tsp.make_random_matrix">[docs]</a><span class="k">def</span> <span class="nf">make_random_matrix</span><span class="p">(</span><span class="n">number_of_towns</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">16</span><span class="p">,</span> <span class="n">min_distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span> <span class="n">max_distance</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">100</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">int</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Function to make random matrix of distances between town</span>
+
+<span class="sd">    :param number_of_towns: number of towns in matrix</span>
+<span class="sd">    :type number_of_towns: int</span>
+<span class="sd">    :param min_distance: minimal distance between towns</span>
+<span class="sd">    :type min_distance: int</span>
+<span class="sd">    :param max_distance: maximum distance between towns</span>
+<span class="sd">    :type max_distance: int</span>
+<span class="sd">    :return: distance matrix</span>
+<span class="sd">    :rtype: int</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">mat</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">random</span><span class="o">.</span><span class="n">randint</span><span class="p">(</span><span class="n">low</span><span class="o">=</span><span class="n">min_distance</span><span class="p">,</span> <span class="n">high</span><span class="o">=</span><span class="n">max_distance</span><span class="p">,</span> <span class="n">size</span><span class="o">=</span><span class="p">(</span><span class="n">number_of_towns</span><span class="p">,</span> <span class="n">number_of_towns</span><span class="p">),</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;int32&#39;</span><span class="p">)</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">mat</span><span class="p">)):</span>
+        <span class="n">mat</span><span class="p">[</span><span class="n">i</span><span class="p">][</span><span class="n">i</span><span class="p">]</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="k">return</span> <span class="n">mat</span></div>
+
+
+<div class="viewcode-block" id="distance_comparision"><a class="viewcode-back" href="../tsp.html#tsp.distance_comparision">[docs]</a><span class="k">def</span> <span class="nf">distance_comparision</span><span class="p">(</span><span class="n">first_dist</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">second_dist</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="s1">&#39;min&#39;</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">bool</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Distance comparision function</span>
+
+<span class="sd">    :param first_dist: first distance to compare</span>
+<span class="sd">    :type first_dist: np.array</span>
+<span class="sd">    :param second_dist: second distance to compare</span>
+<span class="sd">    :type second_dist: np.array</span>
+<span class="sd">    :param kind: type of comparision</span>
+<span class="sd">    :type kind: str</span>
+<span class="sd">    :return: True or False depends of which of dinstaces are &quot;better&quot;</span>
+<span class="sd">    :rtype: bool</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">to_return</span> <span class="o">=</span> <span class="kc">False</span>
+    <span class="k">if</span> <span class="n">kind</span> <span class="o">==</span> <span class="s1">&#39;min&#39;</span><span class="p">:</span>
+        <span class="n">to_return</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">first_dist</span><span class="p">)</span> <span class="o">&lt;</span> <span class="nb">max</span><span class="p">(</span><span class="n">second_dist</span><span class="p">)</span>
+    <span class="k">return</span> <span class="n">to_return</span></div>
+
+
+<div class="viewcode-block" id="random_search"><a class="viewcode-back" href="../tsp.html#tsp.random_search">[docs]</a><span class="k">def</span> <span class="nf">random_search</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">test_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">number_of_drivers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span>
+                  <span class="n">dist_comp</span><span class="p">:</span> <span class="nb">str</span> <span class="o">=</span> <span class="s1">&#39;min&#39;</span><span class="p">,</span> <span class="n">start_town</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Random search implementation</span>
+
+<span class="sd">    :param data: distances matrix</span>
+<span class="sd">    :type data: np.array</span>
+<span class="sd">    :param test_time: time of testing</span>
+<span class="sd">    :type test_time: float</span>
+<span class="sd">    :param number_of_drivers: number of travelers</span>
+<span class="sd">    :type number_of_drivers: int</span>
+<span class="sd">    :param dist_comp: type of distance comparision</span>
+<span class="sd">    :type dist_comp: str</span>
+<span class="sd">    :param start_town: starting_town</span>
+<span class="sd">    :type start_town: int</span>
+<span class="sd">    :return: tuple of best distances and routes of each travelers</span>
+<span class="sd">    :rtype: tuple</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="n">iterations</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">best_dist</span><span class="p">,</span> <span class="n">best_route</span> <span class="o">=</span> <span class="n">generate_random_route</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">number_of_drivers</span><span class="o">=</span><span class="n">number_of_drivers</span><span class="p">,</span> <span class="n">start_town</span><span class="o">=</span><span class="n">start_town</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">best_dist</span><span class="p">)]</span>
+    <span class="n">act_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">act_time</span> <span class="o">+</span> <span class="n">test_time</span><span class="p">:</span>
+        <span class="n">current_dist</span><span class="p">,</span> <span class="n">current_route</span> <span class="o">=</span> <span class="n">generate_random_route</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">number_of_drivers</span><span class="p">,</span> <span class="n">start_town</span><span class="o">=</span><span class="n">start_town</span><span class="p">)</span>
+        <span class="n">iterations</span> <span class="o">=</span> <span class="n">iterations</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">distance_comparision</span><span class="p">(</span><span class="n">current_dist</span><span class="p">,</span> <span class="n">best_dist</span><span class="p">,</span> <span class="n">kind</span><span class="o">=</span><span class="n">dist_comp</span><span class="p">):</span>
+            <span class="n">best_dist</span><span class="p">,</span> <span class="n">best_route</span> <span class="o">=</span> <span class="n">current_dist</span><span class="p">,</span> <span class="n">current_route</span>
+        <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">best_dist</span><span class="p">))</span>
+    <span class="n">prop</span> <span class="o">=</span> <span class="p">(</span><span class="n">test_time</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">x_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+        <span class="n">x_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">prop</span><span class="p">)</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s2">&quot;random_search&quot;</span><span class="p">)</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;distance&#39;</span><span class="p">)</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time[ms]&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Random Search&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best distance: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">best_dist</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best Route &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">best_route</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Iterations &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">iterations</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">best_dist</span><span class="p">,</span> <span class="n">best_route</span></div>
+
+
+<div class="viewcode-block" id="simulated_annealing"><a class="viewcode-back" href="../tsp.html#tsp.simulated_annealing">[docs]</a><span class="k">def</span> <span class="nf">simulated_annealing</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">test_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">number_of_drivers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">start_town</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">,</span>
+                        <span class="n">initial_temperature</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">400000</span><span class="p">,</span> <span class="n">temp_decrease_ratio</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.99</span><span class="p">,</span>
+                        <span class="n">use_swap</span><span class="p">:</span> <span class="nb">bool</span> <span class="o">=</span> <span class="kc">True</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Simulated Annealing implementation</span>
+
+<span class="sd">    :param data: distances matrix</span>
+<span class="sd">    :type data: np.array</span>
+<span class="sd">    :param test_time: time of testing</span>
+<span class="sd">    :type test_time: float</span>
+<span class="sd">    :param number_of_drivers: number of travelers</span>
+<span class="sd">    :type number_of_drivers: int</span>
+<span class="sd">    :param start_town: starting_town</span>
+<span class="sd">    :type start_town: int</span>
+<span class="sd">    :param initial_temperature: hyperparameter of SA</span>
+<span class="sd">    :type initial_temperature: float</span>
+<span class="sd">    :param temp_decrease_ratio: hyperparameter of SA</span>
+<span class="sd">    :type temp_decrease_ratio: float</span>
+<span class="sd">    :param use_swap: Swap two elements of route list instead of generate new random route</span>
+<span class="sd">    :type use_swap: bool</span>
+<span class="sd">    :return: tuple of best distances and routes of each travelers</span>
+<span class="sd">    :rtype: tuple</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    
+    <span class="k">def</span> <span class="nf">swap</span><span class="p">(</span><span class="n">route</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">num_of_drivers</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function for swaping two elements in route list</span>
+
+<span class="sd">        :param route: list of next town destination</span>
+<span class="sd">        :type route: list</span>
+<span class="sd">        :param num_of_drivers: number of travelers</span>
+<span class="sd">        :type num_of_drivers: int</span>
+<span class="sd">        :return: new route and distance of it</span>
+<span class="sd">        :rtype: tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">new_route</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">new_route</span> <span class="o">=</span> <span class="n">new_route</span> <span class="o">+</span> <span class="n">route</span>
+        <span class="n">first_index</span><span class="p">,</span> <span class="n">second_index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">sample</span><span class="p">(</span><span class="n">population</span><span class="o">=</span><span class="nb">list</span><span class="p">(</span><span class="nb">range</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="nb">len</span><span class="p">(</span><span class="n">route</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)),</span> <span class="n">k</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+        <span class="n">new_route</span><span class="p">[</span><span class="n">first_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="n">second_index</span><span class="p">]</span>
+        <span class="n">new_route</span><span class="p">[</span><span class="n">second_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">route</span><span class="p">[</span><span class="n">first_index</span><span class="p">]</span>
+        <span class="n">new_distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_of_drivers</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">st_town</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">route</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">route</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>  <span class="c1"># get the most frequent element</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">route</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">route</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="n">st_town</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">new_distance</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_distance</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="n">route</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">route</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">new_distance</span><span class="p">,</span> <span class="n">new_route</span>
+
+    <span class="n">iterations</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">actual_dist</span><span class="p">,</span> <span class="n">actual_route</span> <span class="o">=</span> <span class="n">generate_random_route</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">number_of_drivers</span><span class="p">,</span> <span class="n">start_town</span><span class="o">=</span><span class="n">start_town</span><span class="p">)</span>
+    <span class="n">best_dist</span><span class="p">,</span> <span class="n">best_route</span> <span class="o">=</span> <span class="n">actual_dist</span><span class="p">,</span> <span class="n">actual_route</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">actual_dist</span><span class="p">)]</span>
+    <span class="n">temperature</span> <span class="o">=</span> <span class="n">initial_temperature</span>
+    <span class="n">temp_decrease_ratio</span> <span class="o">=</span> <span class="n">temp_decrease_ratio</span>
+    <span class="n">act_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">act_time</span> <span class="o">+</span> <span class="n">test_time</span><span class="p">:</span>
+        <span class="n">iterations</span> <span class="o">=</span> <span class="n">iterations</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="k">if</span> <span class="n">use_swap</span><span class="p">:</span>
+            <span class="n">current_dist</span><span class="p">,</span> <span class="n">current_route</span> <span class="o">=</span> <span class="n">swap</span><span class="p">(</span><span class="n">actual_route</span><span class="p">,</span> <span class="n">number_of_drivers</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">current_dist</span><span class="p">,</span> <span class="n">current_route</span> <span class="o">=</span> <span class="n">generate_random_route</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">number_of_drivers</span><span class="p">,</span> <span class="n">start_town</span><span class="o">=</span><span class="n">start_town</span><span class="p">)</span>
+        <span class="n">dist_diff</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="n">current_dist</span><span class="p">)</span><span class="o">-</span><span class="nb">max</span><span class="p">(</span><span class="n">actual_dist</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">dist_diff</span> <span class="o">&lt;=</span> <span class="mi">0</span><span class="p">:</span>
+            <span class="n">actual_dist</span><span class="p">,</span> <span class="n">actual_route</span> <span class="o">=</span> <span class="n">current_dist</span><span class="p">,</span> <span class="n">current_route</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">if</span> <span class="n">temperature</span> <span class="o">&gt;</span> <span class="mf">0.1</span><span class="p">:</span>
+                <span class="n">x</span> <span class="o">=</span> <span class="p">(</span><span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span> <span class="mi">1000</span><span class="p">))</span><span class="o">/</span><span class="mi">1000</span>
+                <span class="k">if</span> <span class="n">x</span> <span class="o">&lt;</span> <span class="n">math</span><span class="o">.</span><span class="n">exp</span><span class="p">(</span><span class="o">-</span><span class="n">dist_diff</span><span class="o">/</span><span class="n">temperature</span><span class="p">):</span>
+                    <span class="n">actual_dist</span><span class="p">,</span> <span class="n">actual_route</span> <span class="o">=</span> <span class="n">current_dist</span><span class="p">,</span> <span class="n">current_route</span>
+        <span class="k">if</span> <span class="nb">max</span><span class="p">(</span><span class="n">best_dist</span><span class="p">)</span> <span class="o">&gt;</span> <span class="nb">max</span><span class="p">(</span><span class="n">actual_dist</span><span class="p">):</span>
+            <span class="n">best_dist</span><span class="p">,</span> <span class="n">best_route</span> <span class="o">=</span> <span class="n">actual_dist</span><span class="p">,</span> <span class="n">actual_route</span>
+        <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">best_dist</span><span class="p">))</span>
+        <span class="n">temperature</span> <span class="o">=</span> <span class="n">temp_decrease_ratio</span><span class="o">*</span><span class="n">temperature</span>
+    <span class="n">prop</span> <span class="o">=</span> <span class="p">(</span><span class="n">test_time</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">x_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+        <span class="n">x_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">prop</span><span class="p">)</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;simulated_annealing, swap: &#39;</span><span class="o">+</span><span class="nb">str</span><span class="p">(</span><span class="n">use_swap</span><span class="p">))</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">ylabel</span><span class="p">(</span><span class="s1">&#39;distance&#39;</span><span class="p">)</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">xlabel</span><span class="p">(</span><span class="s1">&#39;time[ms]&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Simulated Annealing&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Using swap: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">use_swap</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best distance: &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">best_dist</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best Route &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">best_route</span><span class="p">))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Iterations &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">iterations</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">best_dist</span><span class="p">,</span> <span class="n">best_route</span></div>
+
+
+<div class="viewcode-block" id="genetic_algorithm"><a class="viewcode-back" href="../tsp.html#tsp.genetic_algorithm">[docs]</a><span class="k">def</span> <span class="nf">genetic_algorithm</span><span class="p">(</span><span class="n">data</span><span class="p">:</span> <span class="n">np</span><span class="o">.</span><span class="n">array</span><span class="p">,</span> <span class="n">test_time</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">number_of_drivers</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">1</span><span class="p">,</span> <span class="n">population_quantity</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">10</span><span class="p">,</span>
+                      <span class="n">start_town</span><span class="p">:</span> <span class="nb">int</span> <span class="o">=</span> <span class="mi">0</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+    <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">    Genetic algorithm implementation</span>
+
+<span class="sd">    :param data: distances matrix</span>
+<span class="sd">    :type data: np.array</span>
+<span class="sd">    :param test_time: time of testing</span>
+<span class="sd">    :type test_time: float</span>
+<span class="sd">    :param number_of_drivers: number of travelers</span>
+<span class="sd">    :type number_of_drivers: int</span>
+<span class="sd">    :param population_quantity: number of instances in population</span>
+<span class="sd">    :type population_quantity: int</span>
+<span class="sd">    :param start_town: starting_town</span>
+<span class="sd">    :type start_town: int</span>
+<span class="sd">    :return: tuple of best distances and routes of each travelers</span>
+<span class="sd">    :rtype: tuple</span>
+<span class="sd">    &quot;&quot;&quot;</span>
+    <span class="c1"># help functions</span>
+    <span class="k">def</span> <span class="nf">start_population</span><span class="p">(</span><span class="n">num_drivers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">st_town</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">population_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to begin genetic algorithm work, initalize first population</span>
+
+<span class="sd">        :param num_drivers: number of travelers</span>
+<span class="sd">        :type num_drivers: int</span>
+<span class="sd">        :param st_town: starting_town</span>
+<span class="sd">        :type st_town: int</span>
+<span class="sd">        :param population_number: number of instances in population</span>
+<span class="sd">        :type population_number: int</span>
+<span class="sd">        :return: start population</span>
+<span class="sd">        :rtype: tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">route_population</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="n">dist_population</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">population_number</span><span class="p">):</span>
+            <span class="n">new_dist</span><span class="p">,</span> <span class="n">new_route</span> <span class="o">=</span> <span class="n">generate_random_route</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">number_of_drivers</span><span class="o">=</span><span class="n">num_drivers</span><span class="p">,</span> <span class="n">start_town</span><span class="o">=</span><span class="n">st_town</span><span class="p">)</span>
+            <span class="n">route_population</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_route</span><span class="p">)</span>
+            <span class="n">dist_population</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_dist</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">route_population</span><span class="p">,</span> <span class="n">dist_population</span>
+
+    <span class="k">def</span> <span class="nf">crossing</span><span class="p">(</span><span class="n">first_route</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">second_route</span><span class="p">:</span> <span class="nb">list</span><span class="p">,</span> <span class="n">num_drivers</span><span class="p">:</span> <span class="nb">int</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to crossing two routes to create new one</span>
+
+<span class="sd">        :param first_route: first route</span>
+<span class="sd">        :type first_route: list</span>
+<span class="sd">        :param second_route: second route</span>
+<span class="sd">        :type second_route: list</span>
+<span class="sd">        :param num_drivers: number of travelers</span>
+<span class="sd">        :type num_drivers: int</span>
+<span class="sd">        :return: tuple of new route and it&#39;s distance</span>
+<span class="sd">        :rtype: tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+        <span class="n">start_crossing_index</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">first_route</span><span class="p">)</span> <span class="o">-</span> <span class="mi">2</span><span class="p">)</span> <span class="o">+</span> <span class="mi">1</span>
+        <span class="n">decision_maker</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="mi">10</span><span class="p">)</span>
+        <span class="k">if</span> <span class="n">decision_maker</span> <span class="o">&gt;</span> <span class="mi">5</span><span class="p">:</span>
+            <span class="n">new_route</span> <span class="o">=</span> <span class="n">first_route</span><span class="p">[:</span><span class="n">start_crossing_index</span><span class="p">]</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">second_route</span><span class="p">)</span><span class="o">-</span><span class="mi">1</span> <span class="o">!=</span> <span class="n">k</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">second_route</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_route</span><span class="p">:</span>
+                    <span class="n">new_route</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">second_route</span><span class="p">[</span><span class="n">k</span><span class="p">])</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">k</span><span class="o">+</span><span class="mi">1</span>
+            <span class="n">new_route</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">second_route</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">])</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">k</span> <span class="o">=</span> <span class="mi">0</span>
+            <span class="n">new_route</span> <span class="o">=</span> <span class="n">first_route</span><span class="p">[</span><span class="n">start_crossing_index</span><span class="p">:]</span>
+            <span class="k">while</span> <span class="nb">len</span><span class="p">(</span><span class="n">second_route</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span> <span class="o">!=</span> <span class="n">k</span><span class="p">:</span>
+                <span class="k">if</span> <span class="n">second_route</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">new_route</span><span class="p">:</span>
+                    <span class="n">new_route</span> <span class="o">=</span> <span class="p">[</span><span class="n">second_route</span><span class="p">[</span><span class="n">k</span><span class="p">]]</span> <span class="o">+</span> <span class="n">new_route</span>
+                <span class="n">k</span> <span class="o">=</span> <span class="n">k</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">new_route</span> <span class="o">=</span> <span class="p">[</span><span class="n">second_route</span><span class="p">[</span><span class="o">-</span><span class="mi">1</span><span class="p">]]</span> <span class="o">+</span> <span class="n">new_route</span>
+
+        <span class="n">new_distance</span> <span class="o">=</span> <span class="n">np</span><span class="o">.</span><span class="n">zeros</span><span class="p">(</span><span class="n">num_drivers</span><span class="p">,</span> <span class="n">dtype</span><span class="o">=</span><span class="s1">&#39;float&#39;</span><span class="p">)</span>
+        <span class="n">j</span> <span class="o">=</span> <span class="o">-</span><span class="mi">1</span>
+        <span class="n">st_town</span> <span class="o">=</span> <span class="nb">max</span><span class="p">(</span><span class="nb">set</span><span class="p">(</span><span class="n">new_route</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="n">new_route</span><span class="o">.</span><span class="n">count</span><span class="p">)</span>  <span class="c1"># get the most frequent element</span>
+        <span class="k">for</span> <span class="n">k</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">((</span><span class="nb">len</span><span class="p">(</span><span class="n">new_route</span><span class="p">)</span> <span class="o">-</span> <span class="mi">1</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="n">new_route</span><span class="p">[</span><span class="n">k</span><span class="p">]</span> <span class="o">==</span> <span class="n">st_town</span><span class="p">:</span>
+                <span class="n">j</span> <span class="o">=</span> <span class="n">j</span> <span class="o">+</span> <span class="mi">1</span>
+            <span class="n">new_distance</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">=</span> <span class="n">new_distance</span><span class="p">[</span><span class="n">j</span><span class="p">]</span> <span class="o">+</span> <span class="n">data</span><span class="p">[</span><span class="n">new_route</span><span class="p">[</span><span class="n">k</span><span class="p">],</span> <span class="n">new_route</span><span class="p">[</span><span class="n">k</span> <span class="o">+</span> <span class="mi">1</span><span class="p">]]</span>
+        <span class="k">return</span> <span class="n">new_distance</span><span class="p">,</span> <span class="n">new_route</span>
+
+    <span class="k">def</span> <span class="nf">new_pop</span><span class="p">(</span><span class="n">population_number</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">num_drivers</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span> <span class="n">st_town</span><span class="p">:</span> <span class="nb">int</span><span class="p">,</span>
+                <span class="n">elite_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">,</span> <span class="n">mutation_rate</span><span class="p">:</span> <span class="nb">float</span> <span class="o">=</span> <span class="mf">0.2</span><span class="p">)</span> <span class="o">-&gt;</span> <span class="nb">tuple</span><span class="p">:</span>
+        <span class="sd">&quot;&quot;&quot;</span>
+<span class="sd">        Function to generate new population</span>
+
+<span class="sd">        :param population_number: number of instances in population</span>
+<span class="sd">        :type population_number: int</span>
+<span class="sd">        :param num_drivers: number of travelers</span>
+<span class="sd">        :type num_drivers: int</span>
+<span class="sd">        :param st_town: starting_town</span>
+<span class="sd">        :type st_town: int</span>
+<span class="sd">        :param elite_rate: rate of elite members in population, they must be in new population</span>
+<span class="sd">        :type elite_rate: float</span>
+<span class="sd">        :param mutation_rate: rate of mutated members in population</span>
+<span class="sd">        :type mutation_rate: float</span>
+<span class="sd">        :return: new population</span>
+<span class="sd">        :rtype: tuple</span>
+<span class="sd">        &quot;&quot;&quot;</span>
+
+        <span class="n">elite_quantity</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">elite_rate</span> <span class="o">*</span> <span class="n">population_number</span><span class="p">)</span>
+        <span class="n">mutation_quantity</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="n">mutation_rate</span> <span class="o">*</span> <span class="n">population_number</span><span class="p">)</span>
+
+        <span class="c1"># Elite</span>
+        <span class="n">new_pop_dist</span> <span class="o">=</span> <span class="n">population_dist</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">elite_quantity</span><span class="p">]</span>
+        <span class="n">new_pop_route</span> <span class="o">=</span> <span class="n">population_route</span><span class="p">[</span><span class="mi">0</span><span class="p">:</span><span class="n">elite_quantity</span><span class="p">]</span>
+
+        <span class="c1"># Mutation</span>
+        <span class="k">for</span> <span class="n">_</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="n">mutation_quantity</span><span class="p">):</span>
+            <span class="n">new_dist</span><span class="p">,</span> <span class="n">new_route</span> <span class="o">=</span> <span class="n">generate_random_route</span><span class="p">(</span><span class="n">data</span><span class="o">=</span><span class="n">data</span><span class="p">,</span> <span class="n">number_of_drivers</span><span class="o">=</span><span class="n">num_drivers</span><span class="p">,</span> <span class="n">start_town</span><span class="o">=</span><span class="n">st_town</span><span class="p">)</span>
+            <span class="n">new_pop_dist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_dist</span><span class="p">)</span>
+            <span class="n">new_pop_route</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_route</span><span class="p">)</span>
+
+        <span class="c1"># Random cross for others</span>
+        <span class="k">while</span> <span class="ow">not</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">new_pop_dist</span><span class="p">)</span> <span class="o">==</span> <span class="nb">len</span><span class="p">(</span><span class="n">population_dist</span><span class="p">)):</span>
+            <span class="n">c</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">population_route</span><span class="p">))</span>
+            <span class="n">d</span> <span class="o">=</span> <span class="n">random</span><span class="o">.</span><span class="n">randrange</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">population_route</span><span class="p">))</span>
+            <span class="n">new_dist</span><span class="p">,</span> <span class="n">new_route</span> <span class="o">=</span> <span class="n">crossing</span><span class="p">(</span><span class="n">population_route</span><span class="p">[</span><span class="n">c</span><span class="p">],</span> <span class="n">population_route</span><span class="p">[</span><span class="n">d</span><span class="p">],</span> <span class="n">num_drivers</span><span class="o">=</span><span class="n">num_drivers</span><span class="p">)</span>
+            <span class="n">new_pop_dist</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_dist</span><span class="p">)</span>
+            <span class="n">new_pop_route</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">new_route</span><span class="p">)</span>
+        <span class="n">new_pop_dist</span><span class="p">,</span> <span class="n">new_pop_route</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">new_pop_dist</span><span class="p">,</span> <span class="n">new_pop_route</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+        <span class="n">new_pop_dist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">new_pop_dist</span><span class="p">)</span>
+        <span class="n">new_pop_route</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">new_pop_route</span><span class="p">)</span>
+        <span class="k">return</span> <span class="n">new_pop_dist</span><span class="p">,</span> <span class="n">new_pop_route</span>
+
+    <span class="c1"># Set start parameters</span>
+    <span class="n">iterations</span> <span class="o">=</span> <span class="mi">0</span>
+    <span class="n">population_route</span><span class="p">,</span> <span class="n">population_dist</span> <span class="o">=</span> <span class="n">start_population</span><span class="p">(</span><span class="n">num_drivers</span><span class="o">=</span><span class="n">number_of_drivers</span><span class="p">,</span> <span class="n">st_town</span><span class="o">=</span><span class="n">start_town</span><span class="p">,</span>
+                                                         <span class="n">population_number</span><span class="o">=</span><span class="n">population_quantity</span><span class="p">)</span>
+    <span class="n">iterations</span> <span class="o">=</span> <span class="n">iterations</span> <span class="o">+</span> <span class="n">population_quantity</span>
+    <span class="c1"># Sortowanie</span>
+    <span class="n">population_dist</span><span class="p">,</span> <span class="n">population_route</span> <span class="o">=</span> <span class="nb">zip</span><span class="p">(</span><span class="o">*</span><span class="nb">sorted</span><span class="p">(</span><span class="nb">zip</span><span class="p">(</span><span class="n">population_dist</span><span class="p">,</span> <span class="n">population_route</span><span class="p">),</span> <span class="n">key</span><span class="o">=</span><span class="k">lambda</span> <span class="n">x</span><span class="p">:</span> <span class="nb">max</span><span class="p">(</span><span class="n">x</span><span class="p">[</span><span class="mi">0</span><span class="p">])))</span>
+    <span class="n">population_dist</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">population_dist</span><span class="p">)</span>
+    <span class="n">population_route</span> <span class="o">=</span> <span class="nb">list</span><span class="p">(</span><span class="n">population_route</span><span class="p">)</span>
+    <span class="n">y</span> <span class="o">=</span> <span class="p">[</span><span class="nb">max</span><span class="p">(</span><span class="n">population_dist</span><span class="p">[</span><span class="mi">0</span><span class="p">])]</span>
+    <span class="n">act_time</span> <span class="o">=</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span>
+    <span class="k">while</span> <span class="n">time</span><span class="o">.</span><span class="n">time</span><span class="p">()</span> <span class="o">&lt;</span> <span class="n">act_time</span> <span class="o">+</span> <span class="n">test_time</span><span class="p">:</span>
+        <span class="n">iterations</span> <span class="o">=</span> <span class="n">iterations</span> <span class="o">+</span> <span class="n">population_quantity</span>
+        <span class="n">population_dist</span><span class="p">,</span> <span class="n">population_route</span> <span class="o">=</span> <span class="n">new_pop</span><span class="p">(</span><span class="n">population_number</span><span class="o">=</span><span class="n">population_quantity</span><span class="p">,</span>
+                                                    <span class="n">num_drivers</span><span class="o">=</span><span class="n">number_of_drivers</span><span class="p">,</span> <span class="n">st_town</span><span class="o">=</span><span class="n">start_town</span><span class="p">)</span>
+        <span class="n">y</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="nb">max</span><span class="p">(</span><span class="n">population_dist</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="n">prop</span> <span class="o">=</span> <span class="p">(</span><span class="n">test_time</span> <span class="o">*</span> <span class="mi">60</span><span class="p">)</span> <span class="o">/</span> <span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)</span>
+    <span class="n">x_data</span> <span class="o">=</span> <span class="p">[]</span>
+    <span class="k">for</span> <span class="n">i</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">y</span><span class="p">)):</span>
+        <span class="n">x_data</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="n">i</span> <span class="o">*</span> <span class="n">prop</span><span class="p">)</span>
+    <span class="n">matplotlib</span><span class="o">.</span><span class="n">pyplot</span><span class="o">.</span><span class="n">plot</span><span class="p">(</span><span class="n">x_data</span><span class="p">,</span> <span class="n">y</span><span class="p">,</span> <span class="n">label</span><span class="o">=</span><span class="s1">&#39;genetic algorithm&#39;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Genetic Algorithm&quot;</span><span class="p">)</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best distance:&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">population_dist</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Best Route&quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">population_route</span><span class="p">[</span><span class="mi">0</span><span class="p">]))</span>
+    <span class="nb">print</span><span class="p">(</span><span class="s2">&quot;Iterations &quot;</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">iterations</span><span class="p">))</span>
+    <span class="k">return</span> <span class="n">population_dist</span><span class="p">[</span><span class="mi">0</span><span class="p">],</span> <span class="n">population_route</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="../index.html">
+              <img class="logo" src="../_static/project-1.jpg" alt="Logo"/>
+            </a></p>
+<h3><a href="../index.html">TSP-Optimization</a></h3>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../tsp.html">TSP module</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="nav-item nav-item-0"><a href="../index.html">TSP-optimization  documentation</a> &#187;</li>
+          <li class="nav-item nav-item-1"><a href="index.html" >Module code</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2019, Damian Brzoza.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>

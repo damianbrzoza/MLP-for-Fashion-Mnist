@@ -1,0 +1,478 @@
+
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="X-UA-Compatible" content="IE=Edge" />
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <title>MLP Numpy Module &#8212; MLP-for-Fashion-Mnist  documentation</title>
+    <link rel="stylesheet" href="_static/graphite.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    <script type="text/javascript" id="documentation_options" data-url_root="./" src="_static/documentation_options.js"></script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <script type="text/javascript" src="_static/language_data.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="prev" title="Mnist module" href="mnist.html" /> 
+  </head><body>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mnist.html" title="Mnist module"
+             accesskey="P">previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MLP-for-Fashion-Mnist  documentation</a> &#187;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body" role="main">
+            
+  <div class="section" id="mlp-numpy-module">
+<h1>MLP Numpy Module<a class="headerlink" href="#mlp-numpy-module" title="Permalink to this headline">¶</a></h1>
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<span class="target" id="module-mlp"></span><dl class="class">
+<dt id="mlp.MLP">
+<em class="property">class </em><code class="descclassname">mlp.</code><code class="descname">MLP</code><span class="sig-paren">(</span><em>seed=99</em>, <em>verbose=False</em>, <em>restore=False</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlp.html#MLP"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <code class="xref py py-class docutils literal notranslate"><span class="pre">object</span></code></p>
+<p>Initialize MLP object</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>seed</strong> (<em>int</em>) – seed for random</li>
+<li><strong>verbose</strong> (<em>bool</em>) – If want to print help message during using MLP object</li>
+<li><strong>restore</strong> (<em>bool</em>) – Restore from checkpoint or not?</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+<dl class="attribute">
+<dt id="mlp.MLP.nn_architecture">
+<code class="descname">nn_architecture</code><em class="property"> = [{'input_dim': 1296, 'output_dim': 100, 'activation': 'relu'}, {'input_dim': 100, 'output_dim': 10, 'activation': 'softmax'}]</em><a class="headerlink" href="#mlp.MLP.nn_architecture" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="staticmethod">
+<dt id="mlp.MLP.relu">
+<em class="property">static </em><code class="descname">relu</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlp.html#MLP.relu"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.relu" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which apply relu function to current z values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>z</strong> (<em>np.array</em>) – current value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current value after activation function a_curr</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="mlp.MLP.relu_backward">
+<em class="property">static </em><code class="descname">relu_backward</code><span class="sig-paren">(</span><em>d_a</em>, <em>z</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlp.html#MLP.relu_backward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.relu_backward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which apply relu function to current error value for backpropagation process</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>d_a</strong> (<em>np.array</em>) – current error value</li>
+<li><strong>z</strong> (<em>np.array</em>) – current value before activation function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">error before activation function</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="staticmethod">
+<dt id="mlp.MLP.softmax">
+<em class="property">static </em><code class="descname">softmax</code><span class="sig-paren">(</span><em>z</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlp.html#MLP.softmax"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.softmax" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which apply softmax function to current z values</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>z</strong> (<em>np.array</em>) – current value</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">current value after activation function a_curr</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mlp.MLP.softmax_backward">
+<code class="descname">softmax_backward</code><span class="sig-paren">(</span><em>d_a</em>, <em>z</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlp.html#MLP.softmax_backward"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.softmax_backward" title="Permalink to this definition">¶</a></dt>
+<dd><p>Softmax backward propagation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>d_a</strong> (<em>np.array</em>) – current error value</li>
+<li><strong>z</strong> (<em>np.array</em>) – current value before activation function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">error before activation function</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">np.array</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mlp.MLP.single_layer_forward_propagation">
+<code class="descname">single_layer_forward_propagation</code><span class="sig-paren">(</span><em>a_prev</em>, <em>w_curr</em>, <em>b_curr</em>, <em>activation='relu'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlp.html#MLP.single_layer_forward_propagation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.single_layer_forward_propagation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for make forward propagation through one layer in Neural Network</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>a_prev</strong> (<em>np.array</em>) – previous value after activation function (input)</li>
+<li><strong>w_curr</strong> (<em>np.array</em>) – current weights value</li>
+<li><strong>b_curr</strong> (<em>np.array</em>) – current bias value</li>
+<li><strong>activation</strong> (<em>str</em>) – type of activation function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">a_curr and value before activation function z_curr</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mlp.MLP.full_forward_propagation">
+<code class="descname">full_forward_propagation</code><span class="sig-paren">(</span><em>x</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlp.html#MLP.full_forward_propagation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.full_forward_propagation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for make full forward propagation through Neural Network</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x</strong> (<em>np.array</em>) – training data</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">None</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">None</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mlp.MLP.get_cost_value">
+<code class="descname">get_cost_value</code><span class="sig-paren">(</span><em>targets</em>, <em>epsilon=1e-10</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/mlp.html#MLP.get_cost_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.get_cost_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Cross-entropy loss function</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>targets</strong> (<em>np.array</em>) – ground truth</li>
+<li><strong>epsilon</strong> (<em>float</em>) – hiperparater</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">cross_entropy value</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mlp.MLP.get_accuracy_value">
+<code class="descname">get_accuracy_value</code><span class="sig-paren">(</span><em>targets: numpy.array</em><span class="sig-paren">)</span> &#x2192; float<a class="reference internal" href="_modules/mlp.html#MLP.get_accuracy_value"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.get_accuracy_value" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function to count accuracy value</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>targets</strong> (<em>np.array</em>) – ground truth</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">accuracy value</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">float</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mlp.MLP.single_layer_backward_propagation">
+<code class="descname">single_layer_backward_propagation</code><span class="sig-paren">(</span><em>d_a_curr</em>, <em>w_curr</em>, <em>z_curr</em>, <em>a_prev</em>, <em>activation='relu'</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlp.html#MLP.single_layer_backward_propagation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.single_layer_backward_propagation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for make single layer backward propagation</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>d_a_curr</strong> (<em>np.array</em>) – current error value</li>
+<li><strong>w_curr</strong> (<em>np.array</em>) – current weights value</li>
+<li><strong>z_curr</strong> (<em>np.array</em>) – current value before activation function</li>
+<li><strong>a_prev</strong> (<em>np.array</em>) – previous neuron autput value</li>
+<li><strong>activation</strong> (<em>str</em>) – type of activation function</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">d_a_prev, d_w_curr, db_curr</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mlp.MLP.full_backward_propagation">
+<code class="descname">full_backward_propagation</code><span class="sig-paren">(</span><em>targets: numpy.array</em><span class="sig-paren">)</span> &#x2192; dict<a class="reference internal" href="_modules/mlp.html#MLP.full_backward_propagation"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.full_backward_propagation" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for make full backward propagation through Neural Network</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>targets</strong> (<em>np.array</em>) – ground truth</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">gradients values to update weights of NN</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">dict</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mlp.MLP.update">
+<code class="descname">update</code><span class="sig-paren">(</span><em>grads_values</em>, <em>learning_rate</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlp.html#MLP.update"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.update" title="Permalink to this definition">¶</a></dt>
+<dd><p>Update NN weights and bias</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first last simple">
+<li><strong>grads_values</strong> (<em>np.array</em>) – gradient value</li>
+<li><strong>learning_rate</strong> (<em>float</em>) – current learning_rate</li>
+</ul>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mlp.MLP.train">
+<code class="descname">train</code><span class="sig-paren">(</span><em>train_data: numpy.array</em>, <em>train_labels: numpy.array</em>, <em>epochs: int = 1000</em>, <em>learning_rate: float = 0.001</em><span class="sig-paren">)</span> &#x2192; tuple<a class="reference internal" href="_modules/mlp.html#MLP.train"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.train" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which trains model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>train_data</strong> (<em>np.array</em>) – x data for training</li>
+<li><strong>train_labels</strong> (<em>np.array</em>) – y data for training</li>
+<li><strong>epochs</strong> (<em>int</em>) – number of epochs for training</li>
+<li><strong>learning_rate</strong> (<em>float</em>) – hiperparameter of training</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">(self.params_values, self.cost_history, self.accuracy_history)</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">tuple</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mlp.MLP.one_hot_encode">
+<code class="descname">one_hot_encode</code><span class="sig-paren">(</span><em>labels: numpy.array</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlp.html#MLP.one_hot_encode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.one_hot_encode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which convert labels to vector</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>labels</strong> (<em>np.array</em>) – np.array of labels to convert</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">converted labels in one_hot_encode</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mlp.MLP.one_hot_decode">
+<code class="descname">one_hot_decode</code><span class="sig-paren">(</span><em>labels</em><span class="sig-paren">)</span> &#x2192; numpy.array<a class="reference internal" href="_modules/mlp.html#MLP.one_hot_decode"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.one_hot_decode" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function which convert vector to labels</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>labels</strong> (<em>np.array</em>) – np.array of predicted labels to convert</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">converted labels from one_hot_encode</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mlp.MLP.test">
+<code class="descname">test</code><span class="sig-paren">(</span><em>x_input</em>, <em>ground_truth</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlp.html#MLP.test"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.test" title="Permalink to this definition">¶</a></dt>
+<dd><p>Function for test model</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><ul class="first simple">
+<li><strong>x_input</strong> (<em>np.array</em>) – test data</li>
+<li><strong>ground_truth</strong> (<em>np.array</em>) – test labels</li>
+</ul>
+</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body"><p class="first">test accuracy</p>
+</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body"><p class="first last">float</p>
+</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mlp.MLP.predict">
+<code class="descname">predict</code><span class="sig-paren">(</span><em>x_input</em><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlp.html#MLP.predict"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.predict" title="Permalink to this definition">¶</a></dt>
+<dd><p>Funtion to predict output for given input</p>
+<table class="docutils field-list" frame="void" rules="none">
+<col class="field-name" />
+<col class="field-body" />
+<tbody valign="top">
+<tr class="field-odd field"><th class="field-name">Parameters:</th><td class="field-body"><strong>x_input</strong> (<em>np.array</em>) – image data</td>
+</tr>
+<tr class="field-even field"><th class="field-name">Returns:</th><td class="field-body">predition vector</td>
+</tr>
+<tr class="field-odd field"><th class="field-name">Return type:</th><td class="field-body">np.array</td>
+</tr>
+</tbody>
+</table>
+</dd></dl>
+
+<dl class="method">
+<dt id="mlp.MLP.save">
+<code class="descname">save</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlp.html#MLP.save"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.save" title="Permalink to this definition">¶</a></dt>
+<dd><p>Funtion for saving model current variables to files</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="mlp.MLP.load">
+<code class="descname">load</code><span class="sig-paren">(</span><span class="sig-paren">)</span><a class="reference internal" href="_modules/mlp.html#MLP.load"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#mlp.MLP.load" title="Permalink to this definition">¶</a></dt>
+<dd><p>Funtion for loading model current variables to files</p>
+</dd></dl>
+
+</dd></dl>
+
+<div class="line-block">
+<div class="line"><br /></div>
+</div>
+<p><a class="reference internal" href="index.html#mastertoc"><span class="std std-ref">Return Home</span></a></p>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar" role="navigation" aria-label="main navigation">
+        <div class="sphinxsidebarwrapper">
+            <p class="logo"><a href="index.html">
+              <img class="logo" src="_static/mnist.png" alt="Logo"/>
+            </a></p>
+<h3><a href="index.html">TSP-Optimization</a></h3>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="mnist.html">Mnist module</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">MLP Numpy Module</a></li>
+</ul>
+
+<div id="searchbox" style="display: none" role="search">
+  <h3>Quick search</h3>
+    <div class="searchformwrapper">
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    </div>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related" role="navigation" aria-label="related navigation">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="mnist.html" title="Mnist module"
+             >previous</a> |</li>
+        <li class="nav-item nav-item-0"><a href="index.html">MLP-for-Fashion-Mnist  documentation</a> &#187;</li> 
+      </ul>
+    </div>
+    <div class="footer" role="contentinfo">
+        &#169; Copyright 2018, Damian Brzoza.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.8.4.
+    </div>
+  </body>
+</html>
